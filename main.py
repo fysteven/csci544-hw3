@@ -1,23 +1,10 @@
 import sys
 import random
+from create_baseline_features import convert_csv_into_format
 from os import listdir
 from hw3_corpus_tool import get_utterances_from_file, get_utterances_from_filename
 
 __author__ = 'Frank'
-
-
-def convert_csv_into_format(path_to_file):
-    file = open(path_to_file)
-    output = get_utterances_from_file(file)
-
-    for line in output:
-        print(line[0], end='\t')
-        pos_tag = line[2]
-
-        if pos_tag:
-            for i in range(0, len(pos_tag)):
-                print('w[' + str(i) + ']=' + pos_tag[i][0] + '\tpos[' + str(i) + ']=' + pos_tag[i][1], end='\t')
-        print('\n')
 
 
 def get_all_files_in_directory(directory):
@@ -90,10 +77,11 @@ def main():
         program = 'python3 '
         current_script = sys.argv[0]
         print('how to use this program?')
+        print(program + current_script + ' convert path_to_a_directory_of_csv_files')
         print(program + current_script + ' split train.crfsuite.txt 75')
         print(program + current_script + ' calculate one_output_file_generated_by_CRFsuite')
     if len(sys.argv) >= 3:
-        if sys.argv[1] == '1':
+        if sys.argv[1] == 'convert':
             function1(sys.argv[2])
         elif sys.argv[1] == 'calculate':
             calculate_accuracy(sys.argv[2])
