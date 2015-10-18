@@ -42,4 +42,3 @@ def main():
 
 
 main()
-convert_csv_into_format('./data/train/0001.csv')
