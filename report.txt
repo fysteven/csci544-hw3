@@ -1,0 +1,39 @@
+Assignment 3 Report
+
+Name: Yao Fan
+
+1. What I turned in, what it does, and how to run it
+
+Replace this text with a list of Python files in your submission other
+than create_baseline_features.py and create_advanced_features.py. What
+do these files do and how do you run them? If you included
+hw3_corpus_tool.py and modified it in some way then also answer the
+questions for hw3_corpus_tool.py. If there are any special
+instructions for create_baseline_features.py and
+create_advanced_features.py, please include those too.
+
+2. How I evaluated my baseline and advanced features
+
+Replace this text with a description of how you used the labeled data
+to train and evaluate different models.
+
+3. Description of advanced feature set
+
+Replace this text with a description of your advanced feature set.
+
+4. How I developed my advanced feature set
+
+Replace this text with a description of how you developed the advanced
+feature set. If you tried other feature sets with lower accuracies, be
+sure to mention that.
+
+5. Results
+
+Replace Xs with actual results.
+
+Accuracy of baseline features: XX.XX%
+Accuracy of advanced features: XX.XX%
+
+6. Additional information about the assignment
+
+Not applicable (replace this text as necessary).
