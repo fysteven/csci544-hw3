@@ -109,7 +109,7 @@ def calculate_accuracy(file_name):
                 count_accurate += 1
 
     accuracy = count_accurate / total_line_number
-    print('Accuracy of file' + file_name + ' is ' + str(accuracy))
+    print('Accuracy of file ' + file_name + ' is ' + str(accuracy * 100) + '%')
     return accuracy
 
 
@@ -134,6 +134,7 @@ def main():
         print(program + current_script + ' convert_advanced path_to_a_directory_of_csv_files')
         print(program + current_script + ' split train.crfsuite.txt 75')
         print(program + current_script + ' calculate one_output_file_generated_by_CRFsuite')
+        print(program + current_script + ' diff output_by_CRFsuite')
     if len(sys.argv) >= 3:
         if sys.argv[1] == 'convert':
             function1(sys.argv[2])
