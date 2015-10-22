@@ -47,12 +47,32 @@ def is_backchannel_word(word):
         return False
 
 
+def is_yes_answer_word(word):
+    keywords = {'yeah', 'yes', 'uh-huh', 'right', 'correct'}
+    if word.lower() in keywords:
+        return True
+    else:
+        return False
+
+def check_questions(pos_tag, length):
+    if pos_tag[length - 1][0] == '?':
+        print('_question_:10', end='\t')
+        keywords = {'am', 'is', 'are', 'do', 'does', 'did', 'have', 'has', 'had',
+                    'can', 'could', 'may', 'might', 'shall', 'should', 'will', 'would', 'must', 'ought'}
+        if pos_tag[0][0] in keywords:
+            print('_qy_:10', end='\t')
+        return True
+    else:
+        return False
+
+
 def create_features(file_name):
     file = open(file_name)
     output = get_utterances_from_file(file)
     first_utterance_has_past = False
     p_previous_speaker = ''
     previous_speaker = ''
+    previous_is_question = False
     index = 0
     for line in output:
         print(line[0], end='\t')
@@ -66,7 +86,7 @@ def create_features(file_name):
         pos_tag = line[2]
 
         if not pos_tag:
-            print('_x_one_:7', end='\t')
+            print('_x_one_:15', end='\t')
 
         if pos_tag:
             length = len(pos_tag)
@@ -95,7 +115,16 @@ def create_features(file_name):
                     if length - 2 >= 0:
                         pair = pos_tag[length - 2]
                 if is_backchannel_word(pair[0]):
-                    print('_b_this_\t_b_is_\t_b_for_\t_b_sure_', end='\t')
+                    if not previous_is_question:
+                        print('_b_this_:4', end='\t')
+                    else:
+                        if is_yes_answer_word(pair[0]):
+                            print('_ny_yes_:10', end='\t')
+
+            if check_questions(pos_tag, length):
+                previous_is_question = True
+            else:
+                previous_is_question = False
 
         if previous_speaker != line[1]:
             # the speaker of the current utterance has changed
@@ -103,7 +132,7 @@ def create_features(file_name):
                 print('_SPEAKER_CHANGED_', end='\t')
             if p_previous_speaker == line[1] and len(output[index - 1][2]) <= 2:
                 # p_p is current, but previous is not current
-                print('_+_p_\t_+_pp_\t_+_ppp_', end='\t')
+                print('_+_p_:3', end='\t')
 
         print('\n')
         previous_speaker = line[1]
