@@ -39,8 +39,10 @@ def check(length, pos_tag):
     if pos_tag[length - 1][1] == 'JJ' or pos_tag[length - 2][1] == 'JJ':
         print('__adj_ending_', end='\t')
 
+
 def is_backchannel_word(word):
-    backchannel_words = {'uh-uh', 'uh-huh', 'yes', 'right', 'correct', 'yeah', 'yep', 'uh', 'huh', 'oh', 'um'}
+    backchannel_words = {'uh-uh', 'uh-huh', 'yes', 'right', 'correct', 'yeah', 'yep', 'uh', 'huh', 'oh', 'um',
+                         'really', 'sure'}
     if word.lower() in backchannel_words:
         return True
     else:
@@ -54,13 +56,29 @@ def is_yes_answer_word(word):
     else:
         return False
 
-def check_questions(pos_tag, length):
+
+def is_no_answer_word(word):
+    keywords = {'no'}
+    if word.lower() in keywords:
+        return True
+    else:
+        return False
+
+
+def check_questions(pos_tag, length, line):
     if pos_tag[length - 1][0] == '?':
         print('_question_:10', end='\t')
         keywords = {'am', 'is', 'are', 'do', 'does', 'did', 'have', 'has', 'had',
                     'can', 'could', 'may', 'might', 'shall', 'should', 'will', 'would', 'must', 'ought'}
-        if pos_tag[0][0] in keywords:
-            print('_qy_:10', end='\t')
+        if pos_tag[0][0].lower() in keywords:
+            print('_qy_yes_no_:10', end='\t')
+        else:
+            open_question_keywords = {'how do you think', 'what do you think', 'how about you', 'what do you feel'
+                                      ,'what about yourself', 'what do you', 'what about', 'how about'}
+            for keyword in open_question_keywords:
+                if keyword in line[3]:
+                    print('_qo_open_:7', end='\t')
+                    break
         return True
     else:
         return False
@@ -108,20 +126,25 @@ def create_features(file_name):
                         or pair[1] == 'UH' and not is_backchannel_word(pair[0]):
                     print('_%_short_\t_%_incomplete_\t_%_no_meaning_', end='\t')
 
-            # backchannel
             if length <= 4:
                 pair = pos_tag[length - 1]
                 if pair[1] == '.' or pair[1] == ',':
                     if length - 2 >= 0:
                         pair = pos_tag[length - 2]
-                if is_backchannel_word(pair[0]):
-                    if not previous_is_question:
-                        print('_b_this_:4', end='\t')
-                    else:
-                        if is_yes_answer_word(pair[0]):
-                            print('_ny_yes_:10', end='\t')
 
-            if check_questions(pos_tag, length):
+                if is_yes_answer_word(pair[0]) and previous_is_question:
+                    print('_ny_yes_:10', end='\t')
+
+                elif is_no_answer_word(pair[0]):
+                    print('_nn_no_:5', end='\t')
+
+                elif is_backchannel_word(pair[0]):
+                    if not previous_is_question:
+                        # backchannel
+                        print('_b_this_:4', end='\t')
+                        pass
+
+            if check_questions(pos_tag, length, line):
                 previous_is_question = True
             else:
                 previous_is_question = False
