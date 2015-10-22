@@ -84,6 +84,16 @@ def check_questions(pos_tag, length, line):
         return False
 
 
+def check_abandoned(pos_tag, length, line):
+    if length >= 5:
+        keywords = {'VBP', 'VBD', 'BES'}
+        for i in range(0, length):
+            if pos_tag[i][1] in keywords:
+                return
+        print('_%_no_verb_:5', end='\t')
+    return
+
+
 def create_features(file_name):
     file = open(file_name)
     output = get_utterances_from_file(file)
@@ -143,6 +153,7 @@ def create_features(file_name):
                         # backchannel
                         print('_b_this_:4', end='\t')
                         pass
+            check_abandoned(pos_tag, length, line)
 
             if check_questions(pos_tag, length, line):
                 previous_is_question = True
