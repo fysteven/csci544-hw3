@@ -50,7 +50,7 @@ def is_backchannel_word(word):
 
 
 def is_yes_answer_word(word):
-    keywords = {'yeah', 'yes', 'uh-huh', 'right', 'correct'}
+    keywords = {'yeah', 'yes', 'uh-huh', 'right', 'correct', 'really', 'exactly', 'sure'}
     if word.lower() in keywords:
         return True
     else:
@@ -58,7 +58,7 @@ def is_yes_answer_word(word):
 
 
 def is_no_answer_word(word):
-    keywords = {'no'}
+    keywords = {'no', 'nope'}
     if word.lower() in keywords:
         return True
     else:
@@ -86,11 +86,30 @@ def check_questions(pos_tag, length, line):
 
 def check_abandoned(pos_tag, length, line):
     if length >= 5:
-        keywords = {'VBP', 'VBD', 'BES'}
+        keywords = {'VBP', 'VBD', 'BES', 'VB'}
         for i in range(0, length):
             if pos_tag[i][1] in keywords:
                 return
         print('_%_no_verb_:5', end='\t')
+    return
+
+
+def check_or_clause(pos_tag, length):
+    if pos_tag[0][0].lower() == 'or' or length >= 2 and pos_tag[1][0].lower() == 'or':
+        print('_qrr_or_clause_:5', end='\t')
+    return
+
+
+def check_repeat_phrase(pos_tag, length, index, output):
+    if index != 0:
+        if length == len(output[index - 1][2]):
+            pass
+
+
+def check_uninterpretable(pos_tag, length):
+    if pos_tag[length - 1][1] == ',':
+        if length >= 2 and pos_tag[length - 2][1] == 'XX':
+            print('_%_uninterpretable_:7', end='\t')
     return
 
 
@@ -101,8 +120,9 @@ def create_features(file_name):
     p_previous_speaker = ''
     previous_speaker = ''
     previous_is_question = False
-    index = 0
-    for line in output:
+
+    for index in range(0, len(output)):
+        line = output[index]
         print(line[0], end='\t')
 
         if not first_utterance_has_past:
@@ -145,15 +165,25 @@ def create_features(file_name):
                 if is_yes_answer_word(pair[0]) and previous_is_question:
                     print('_ny_yes_:10', end='\t')
 
-                elif is_no_answer_word(pair[0]):
+                elif is_no_answer_word(pair[0]) and previous_is_question:
                     print('_nn_no_:5', end='\t')
+
+                elif is_no_answer_word(pair[0]) and not previous_is_question:
+                    print('_aa_agree_:5', end='\t')
+
+                elif is_yes_answer_word(pair[0]) and not previous_is_question:
+                    print('_aa_agree_:6', end='\t')
 
                 elif is_backchannel_word(pair[0]):
                     if not previous_is_question:
                         # backchannel
                         print('_b_this_:4', end='\t')
                         pass
+
+            check_uninterpretable(pos_tag, length)
             check_abandoned(pos_tag, length, line)
+            check_or_clause(pos_tag, length)
+            # check_repeat_phrase(pos_tag, length, index, output)
 
             if check_questions(pos_tag, length, line):
                 previous_is_question = True
@@ -171,7 +201,6 @@ def create_features(file_name):
         print('\n')
         previous_speaker = line[1]
         p_previous_speaker = previous_speaker
-        index += 1
 
 
 def main():

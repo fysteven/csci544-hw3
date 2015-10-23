@@ -15,17 +15,18 @@ def convert_csv_into_format(path_to_file):
 
         if not first_utterance_has_past:
             first_utterance_has_past = True
-            print('__FIRST_UTTERANCE__', end='\t')
+            print('YES', end='\t')
 
         pos_tag = line[2]
 
         if pos_tag:
             for i in range(0, len(pos_tag)):
-                print('w[' + str(i) + ']=' + pos_tag[i][0] + '\tpos[' + str(i) + ']=' + pos_tag[i][1], end='\t')
+                pos = pos_tag[i][1] if pos_tag[i][1] != ':' else '(colon)'
+                print('TOKEN_' + pos_tag[i][0] + '\tPOS_' + pos, end='\t')
         if previous_speaker != line[1]:
             # the speaker of the current utterance has changed
             if previous_speaker != '':
-                print('__SPEAKER_CHANGED__', end='\t')
+                print('SPEAKER_CHANGED', end='\t')
         print('\n')
         previous_speaker = line[1]
 
