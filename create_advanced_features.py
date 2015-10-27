@@ -142,10 +142,8 @@ def create_features(file_name):
 
             for i in range(0, length):
                 # filter some words
-                if False:
-                    pass
-                else:
-                    print('w[' + str(i) + ']=' + pos_tag[i][0] + '\tpos[' + str(i) + ']=' + pos_tag[i][1], end='\t')
+                pos = pos_tag[i][1] if pos_tag[i][1] != ':' else '(colon)'
+                print('TOKEN_' + pos_tag[i][0] + '\tPOS_' + pos, end='\t')
 
             if length <= 3 and False:
                 pair = pos_tag[length - 1]
@@ -198,9 +196,11 @@ def create_features(file_name):
                 # p_p is current, but previous is not current
                 print('_+_p_:3', end='\t')
 
-        print('\n')
+        print()
         previous_speaker = line[1]
         p_previous_speaker = previous_speaker
+    print('\n')
+    return
 
 
 def main():

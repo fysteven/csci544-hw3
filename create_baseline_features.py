@@ -15,7 +15,7 @@ def convert_csv_into_format(path_to_file):
 
         if not first_utterance_has_past:
             first_utterance_has_past = True
-            print('YES', end='\t')
+            print('_FIRST_UTTERANCE_', end='\t')
 
         pos_tag = line[2]
 
@@ -26,9 +26,10 @@ def convert_csv_into_format(path_to_file):
         if previous_speaker != line[1]:
             # the speaker of the current utterance has changed
             if previous_speaker != '':
-                print('SPEAKER_CHANGED', end='\t')
-        print('\n')
+                print('_SPEAKER_CHANGED_', end='\t')
+        print()
         previous_speaker = line[1]
+    print('\n')
 
 
 def get_all_files_in_directory(directory):
