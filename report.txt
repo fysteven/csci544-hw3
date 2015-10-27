@@ -12,6 +12,7 @@ questions for hw3_corpus_tool.py. If there are any special
 instructions for create_baseline_features.py and
 create_advanced_features.py, please include those too.
 
+hw3_corpus_tool.py
 
 create_baseline_features.py
 swbdDAMSL.crfsuite.baseline.model
@@ -85,9 +86,12 @@ Replace this text with a description of how you developed the advanced
 feature set. If you tried other feature sets with lower accuracies, be
 sure to mention that.
 
-5. Results
+In advanced feature set, I added certain pattern to detect if the current utterance is sd, sv, x. Basically, the program
+understands the utterance a little bit and outputs a result with a better performance.
 
-Replace Xs with actual results.
+Some trials were actually reducing the accuracy. But I changed it later to make it get better.
+
+5. Results
 
 Accuracy of baseline features: 72.82987426147554%
 Accuracy of advanced features: XX.XX%
