@@ -12,10 +12,68 @@ questions for hw3_corpus_tool.py. If there are any special
 instructions for create_baseline_features.py and
 create_advanced_features.py, please include those too.
 
+
+create_baseline_features.py
+swbdDAMSL.crfsuite.baseline.model
+swbdDAMSL.crfsuite.baseline.out
+
+create_advanced_features.py
+swbdDAMSL.crfsuite.advanced.model
+swbdDAMSL.crfsuite.advanced.out
+
+all_data_advanced.sh
+all_data_baseline.sh
+
+These two shell scripts automatically uses main.py to create the training file for CRFSuite, run CRFSuite to learn,
+and then tag.
+
+I put most of the code of utility tools in main.py.
+
+If you run the Python file without any parameters, you would get this in your terminal:
+
+$ python3 main.py
+how to use this program?
+python3 main.py convert path_to_a_directory_of_csv_files
+python3 main.py convert_advanced path_to_a_directory_of_csv_files
+python3 main.py split train.crfsuite.txt 75
+python3 main.py split_directory path_to_directory 75
+python3 main.py create_crf_input baseline file_name
+python3 main.py create_crf_input advanced file_name
+python3 main.py calculate one_output_file_generated_by_CRFsuite
+python3 main.py diff output_by_CRFsuite
+
+python3 main.py convert ./data/train/
+
+this creates a training file with baseline features in the current directory.
+
+python3 main.py convert_advanced ./data/train/
+
+this creates a training file with advanced features in the current directory.
+
+python3 main.py split_directory ./data/train/ 75
+
+this randomly selects 75% of the files in the training data set, and creates a file in the current directory
+which contains the 75% for training. It also creates another file which contains the other 25% for testing purpose.
+
+python3 main.py create_crf_input baseline split_75_training.txt > split_75_training.baseline
+
+this reads all the file names from the file split_75_training.txt, and outputs the baseline features to STDOUT. Then the output
+will be redirected to split_75_training.baseline
+
+python3 main.py create_crf_input advanced split_75_training.txt > split_75_training.advanced
+
+this reads all the file names from the file split_75_training.txt, and outputs the advanced features to STDOUT. Then
+the output will be redirected to split_75_training.advanced
+
+python3 main.py calculate split_75_training.baseline.out
+
+if the output file by CRFSuite contains an actual label and a predicted label in a row, this will calculate the accuracy.
+
+
 2. How I evaluated my baseline and advanced features
 
-Replace this text with a description of how you used the labeled data
-to train and evaluate different models.
+I firstly read all the data to the memory and evaluated the accuracy, but I found out that it was not good. Then I
+split 75% of the training files, and used the other 25% for testing. And I got a better performance.
 
 3. Description of advanced feature set
 
@@ -31,7 +89,7 @@ sure to mention that.
 
 Replace Xs with actual results.
 
-Accuracy of baseline features: XX.XX%
+Accuracy of baseline features: 72.82987426147554%
 Accuracy of advanced features: XX.XX%
 
 6. Additional information about the assignment

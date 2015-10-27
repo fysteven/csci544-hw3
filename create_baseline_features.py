@@ -29,7 +29,7 @@ def convert_csv_into_format(path_to_file):
                 print('_SPEAKER_CHANGED_', end='\t')
         print()
         previous_speaker = line[1]
-    print('\n')
+    print('')
 
 
 def get_all_files_in_directory(directory):

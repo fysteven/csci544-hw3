@@ -34,6 +34,32 @@ def function2(directory):
     return
 
 
+def function3_baseline(file):
+    training = open(file)
+    files_to_open_for_training = []
+    for line in training:
+        words = line.split()
+        files_to_open_for_training.append(words[0])
+    training.close()
+
+    for file in files_to_open_for_training:
+        convert_csv_into_format(file)
+    return
+
+
+def function4_advanced(file):
+    training = open(file)
+    files_to_open_for_training = []
+    for line in training:
+        words = line.split()
+        files_to_open_for_training.append(words[0])
+    training.close()
+
+    for file in files_to_open_for_training:
+        create_features(file)
+    return
+
+
 def split_data(input_file_name, percentage):
     input_file = open(input_file_name)
     lines = []
@@ -95,6 +121,32 @@ def split_data2(input_file_name, percentage):
     output_dev_file.close()
 
 
+def split_files_in_directory(path, percentage):
+    files = get_all_files_in_directory(path)
+    number_of_files = len(files)
+    indices_training_files = random.sample(range(0, number_of_files), int(number_of_files * float(percentage) / 100))
+    set_index_training_files = set(indices_training_files)
+    set_index_dev_files = {i for i in range(0, number_of_files)} - set_index_training_files
+
+    training = ''
+    dev = ''
+    for line in indices_training_files:
+        training += files[line] + '\n'
+
+    for line in set_index_dev_files:
+        dev += files[line] + '\n'
+
+    temp_file_training = open('split_' + str(percentage) + '_training.txt', 'w')
+    temp_file_training.write(training)
+    temp_file_training.close()
+    print(temp_file_training.name + ' created.')
+
+    temp_file_dev = open('split_' + str(percentage) + '_dev.txt', 'w')
+    temp_file_dev.write(dev)
+    temp_file_dev.close()
+    print(temp_file_dev.name + ' created.')
+
+
 def calculate_accuracy(file_name):
     file = open(file_name)
     count_accurate = 0
@@ -133,6 +185,9 @@ def main():
         print(program + current_script + ' convert path_to_a_directory_of_csv_files')
         print(program + current_script + ' convert_advanced path_to_a_directory_of_csv_files')
         print(program + current_script + ' split train.crfsuite.txt 75')
+        print(program + current_script + ' split_directory path_to_directory 75')
+        print(program + current_script + ' create_crf_input baseline file_name')
+        print(program + current_script + ' create_crf_input advanced file_name')
         print(program + current_script + ' calculate one_output_file_generated_by_CRFsuite')
         print(program + current_script + ' diff output_by_CRFsuite')
     if len(sys.argv) >= 3:
@@ -147,6 +202,13 @@ def main():
     if len(sys.argv) >= 4:
         if sys.argv[1] == 'split':
             split_data2(sys.argv[2], sys.argv[3])
+        elif sys.argv[1] == 'split_directory':
+            split_files_in_directory(sys.argv[2], sys.argv[3])
+        elif sys.argv[1] == 'create_crf_input':
+            if sys.argv[2] == 'baseline':
+                function3_baseline(sys.argv[3])
+            elif sys.argv[2] == 'advanced':
+                function4_advanced(sys.argv[3])
 
 
 main()
