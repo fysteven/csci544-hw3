@@ -4,14 +4,6 @@ Name: Yao Fan
 
 1. What I turned in, what it does, and how to run it
 
-Replace this text with a list of Python files in your submission other
-than create_baseline_features.py and create_advanced_features.py. What
-do these files do and how do you run them? If you included
-hw3_corpus_tool.py and modified it in some way then also answer the
-questions for hw3_corpus_tool.py. If there are any special
-instructions for create_baseline_features.py and
-create_advanced_features.py, please include those too.
-
 hw3_corpus_tool.py
 
 create_baseline_features.py
@@ -24,6 +16,9 @@ swbdDAMSL.crfsuite.advanced.out
 
 all_data_advanced.sh
 all_data_baseline.sh
+
+you have to put the training data and test data here: ./data/train/ and ./data/test/
+before you run them, make sure you have give appropriate permission.
 
 These two shell scripts automatically uses main.py to create the training file for CRFSuite, run CRFSuite to learn,
 and then tag.
@@ -82,6 +77,8 @@ Replace this text with a description of your advanced feature set.
 
 bi-grams, tri-grams. I used them in the advanced feature set. They are something like POS_VBP|POS_VBP TOKEN_I|TOKEN_don.
 
+I also added a lot of features for sd, sv, x, b, ny, qy, qh, aa, and so on. These features are used to classify as many
+utterance as possible. And it increased the accuracy by about 1 or 2 percent.
 
 4. How I developed my advanced feature set
 
@@ -89,7 +86,7 @@ Replace this text with a description of how you developed the advanced
 feature set. If you tried other feature sets with lower accuracies, be
 sure to mention that.
 
-In every iteration, I added bi-gram part of speeches and also tri-gram part of speeches.
+In every iteration, I added bi-gram and also tri-gram both of part of speeches and of tokens.
 
 In advanced feature set, I added certain pattern to detect if the current utterance is sd, sv, x. Basically, the program
 understands the utterance a little bit and outputs a result with a better performance.
