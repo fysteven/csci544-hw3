@@ -86,11 +86,19 @@ def check_questions(pos_tag, length, line):
 
 def check_abandoned(pos_tag, length, line):
     if length >= 5:
-        keywords = {'VBP', 'VBD', 'BES', 'VB'}
+        contains_keyword = False
+        keywords = {'VBP', 'VBD', '^VBD', 'VBG', 'BES', 'VB', 'VBZ', 'VBN'}
         for i in range(0, length):
             if pos_tag[i][1] in keywords:
-                return
-        print('_%_no_verb_:5', end='\t')
+                contains_keyword = True
+                break
+        if not contains_keyword:
+            print('_%_no_verb_:5', end='\t')
+        if pos_tag[-1][1] == ',':
+            print('_%_comma_end_:4', end='\t')
+    if length < 5:
+        if pos_tag[-1][1] == ',':
+            print('_%_comma_end_:4', end='\t')
     return
 
 
@@ -133,17 +141,25 @@ def create_features(file_name):
 
         pos_tag = line[2]
 
-        if not pos_tag:
+        if not pos_tag or len(pos_tag) == 1 and pos_tag[0][0] == '.':
             print('_x_one_:15', end='\t')
 
         if pos_tag:
             length = len(pos_tag)
             # check(length, pos_tag)
-
+            print('_length=' + str(length), end='\t')
             for i in range(0, length):
                 # filter some words
                 pos = pos_tag[i][1] if pos_tag[i][1] != ':' else '(colon)'
-                print('TOKEN_' + pos_tag[i][0] + '\tPOS_' + pos, end='\t')
+                print('T_' + pos_tag[i][0] + '\tP_' + pos, end='\t')
+                if i <= length - 2:
+                    print('T_' + pos_tag[i][0] + '|' + 'T_' + pos_tag[i + 1][0], end='\t')
+                    print('P_' + pos_tag[i][1] + '|' + 'P_' + pos_tag[i + 1][1], end='\t')
+                if i <= length - 3:
+                    print('T_' + pos_tag[i][0] + '|' + 'T_' + pos_tag[i + 1][0] + '|' + 'T_' +
+                          pos_tag[i + 2][0], end='\t')
+                    print('P_' + pos_tag[i][1] + '|' + 'P_' + pos_tag[i + 1][1] + '|' + 'P_' +
+                          pos_tag[i + 2][1], end='\t')
 
             if length <= 3 and False:
                 pair = pos_tag[length - 1]
@@ -169,14 +185,14 @@ def create_features(file_name):
                 elif is_no_answer_word(pair[0]) and not previous_is_question:
                     print('_aa_agree_:5', end='\t')
 
-                elif is_yes_answer_word(pair[0]) and not previous_is_question:
-                    print('_aa_agree_:6', end='\t')
-
                 elif is_backchannel_word(pair[0]):
                     if not previous_is_question:
                         # backchannel
                         print('_b_this_:4', end='\t')
                         pass
+
+                elif is_yes_answer_word(pair[0]) and not previous_is_question:
+                    print('_aa_agree_:6', end='\t')
 
             check_uninterpretable(pos_tag, length)
             check_abandoned(pos_tag, length, line)
@@ -199,7 +215,7 @@ def create_features(file_name):
         print()
         previous_speaker = line[1]
         p_previous_speaker = previous_speaker
-    print('\n')
+    print()
     return
 
 

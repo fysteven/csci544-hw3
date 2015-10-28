@@ -80,11 +80,16 @@ split 75% of the training files, and used the other 25% for testing. And I got a
 
 Replace this text with a description of your advanced feature set.
 
+bi-grams, tri-grams. I used them in the advanced feature set. They are something like POS_VBP|POS_VBP TOKEN_I|TOKEN_don.
+
+
 4. How I developed my advanced feature set
 
 Replace this text with a description of how you developed the advanced
 feature set. If you tried other feature sets with lower accuracies, be
 sure to mention that.
+
+In every iteration, I added bi-gram part of speeches and also tri-gram part of speeches.
 
 In advanced feature set, I added certain pattern to detect if the current utterance is sd, sv, x. Basically, the program
 understands the utterance a little bit and outputs a result with a better performance.
@@ -94,7 +99,7 @@ Some trials were actually reducing the accuracy. But I changed it later to make 
 5. Results
 
 Accuracy of baseline features: 72.82987426147554%
-Accuracy of advanced features: XX.XX%
+Accuracy of advanced features: 74.15117574620301%
 
 6. Additional information about the assignment
 

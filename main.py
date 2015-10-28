@@ -184,7 +184,7 @@ def main():
         print('how to use this program?')
         print(program + current_script + ' convert path_to_a_directory_of_csv_files')
         print(program + current_script + ' convert_advanced path_to_a_directory_of_csv_files')
-        print(program + current_script + ' split train.crfsuite.txt 75')
+        # print(program + current_script + ' split train.crfsuite.txt 75')
         print(program + current_script + ' split_directory path_to_directory 75')
         print(program + current_script + ' create_crf_input baseline file_name')
         print(program + current_script + ' create_crf_input advanced file_name')
@@ -201,7 +201,8 @@ def main():
             show_different_labels(sys.argv[2])
     if len(sys.argv) >= 4:
         if sys.argv[1] == 'split':
-            split_data2(sys.argv[2], sys.argv[3])
+            # split_data2(sys.argv[2], sys.argv[3])
+            pass
         elif sys.argv[1] == 'split_directory':
             split_files_in_directory(sys.argv[2], sys.argv[3])
         elif sys.argv[1] == 'create_crf_input':
